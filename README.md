@@ -35,22 +35,6 @@ because the text is used directly in the command invocation to allow extra flags
 to be passed (e.g. `-i`).  Consequently, if you want to include spaces in your
 pattern, you should surround your query with quotes: e.g. `"hello, world"`.
 
-## Key Bindings
-
-Grep Panel doesn't come with default key bindings, but if you're using
-[VSCodeVim](https://github.com/VSCodeVim/Vim), I personally use:
-
-```json
-{
-    "vim.normalModeKeyBindings": [
-        {
-            "before": ["<C-\>", "r"],
-            "commands": ["grep-panel.grep"]
-        }
-    ]
-}
-```
-
 ## Thanks
 
 - Thanks to [ripgrep](https://github.com/BurntSushi/ripgrep) for being an
