@@ -14,6 +14,11 @@ Three different types of grep are tried in the following order:
 Whichever succeeds first is used and they're ordered this way from fastest to
 slowest.
 
+## Installation
+
+Install through the Visual Studio Code Marketplace:
+https://marketplace.visualstudio.com/items?itemName=chrisjdavies.grep-panel
+
 ## Screenshot
 
 ![Screenshot](images/screenshot.png)
