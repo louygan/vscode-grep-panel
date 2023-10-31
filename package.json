@@ -2,7 +2,7 @@
   "name": "grep-panel",
   "displayName": "Grep Panel",
   "description": "Keep Grep/Ripgrep results in a panel.",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "license": "MIT",
   "homepage": "https://github.com/chrisjdavies/vscode-grep-panel",
   "publisher": "chrisjdavies",
