@@ -1,5 +1,9 @@
 # Change Log
 
+## [0.0.4]
+
+- Added "Copy Results" command.
+
 ## [0.0.3]
 
 - Differentiate between zero results and failing to run any greps.

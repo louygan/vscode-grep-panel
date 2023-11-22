@@ -2,7 +2,7 @@
   "name": "grep-panel",
   "displayName": "Grep Panel",
   "description": "Keep Grep/Ripgrep results in a panel.",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "license": "MIT",
   "homepage": "https://github.com/chrisjdavies/vscode-grep-panel",
   "publisher": "chrisjdavies",
@@ -52,10 +52,29 @@
         "title": "Grep Panel: Grep..."
       },
       {
+        "command": "grep-panel.copy-results",
+        "title": "Grep Panel: Copy Results"
+      },
+      {
         "command": "grep-panel.clear",
         "title": "Grep Panel: Clear Results"
       }
-    ]
+     ],
+    "menus": {
+      "view/item/context": [
+          {
+            "command": "grep-panel.copy-results",
+            "when": "view == grepResults"
+          },
+          {
+            "command": "grep-panel.clear",
+            "when": "view == grepResults"
+          }
+      ]
+    }
+  },
+  "dependencies": {
+    "copy-paste": "^1.5.3"
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -66,15 +85,16 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.83.0",
+    "@types/copy-paste": "^1.1.33",
     "@types/mocha": "^10.0.2",
     "@types/node": "18.x",
+    "@types/vscode": "^1.83.0",
     "@typescript-eslint/eslint-plugin": "^6.7.3",
     "@typescript-eslint/parser": "^6.7.3",
+    "@vscode/test-electron": "^2.3.4",
     "eslint": "^8.50.0",
     "glob": "^10.3.3",
     "mocha": "^10.2.0",
-    "typescript": "^5.2.2",
-    "@vscode/test-electron": "^2.3.4"
+    "typescript": "^5.2.2"
   }
 }

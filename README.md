@@ -28,6 +28,7 @@ https://marketplace.visualstudio.com/items?itemName=chrisjdavies.grep-panel
 Grep Panel adds the following commands to the command palette:
 
 - Grep Panel: Grep...
+- Grep Panel: Copy Results
 - Grep Panel: Clear Results
 
 For the _Grep..._ command, the query box is populated with either:

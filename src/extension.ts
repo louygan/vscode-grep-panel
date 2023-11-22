@@ -2,6 +2,8 @@ import { execSync } from 'child_process';
 import path = require('path');
 import * as vscode from 'vscode';
 
+import * as copy from 'copy-paste';
+
 // Priority order:
 const GREP_COMMANDS = [
 	"rg -Hn",
@@ -93,9 +95,11 @@ class GrepResultsTree implements vscode.TreeDataProvider<GrepResult> {
 }
 
 let grepResults: undefined | GrepResultsTree;
+let lastGrepOutput: undefined | string;
 
 function clearResults(): void {
 	grepResults?.clearResults();
+	lastGrepOutput = undefined;
 }
 
 function grepExec(query: string): GrepResult[] {
@@ -118,9 +122,9 @@ function grepExec(query: string): GrepResult[] {
 	for (let cmdIndex = 0; cmdIndex < GREP_COMMANDS.length; ++cmdIndex) {
 		try {
 			const grepCmd = GREP_COMMANDS[cmdIndex];
-			const grepOutput = execSync(`${grepCmd} ${query} .`, {cwd: cwd});
-			return grepOutput
-				.toString()
+			const grepOutput = execSync(`${grepCmd} ${query} .`, {cwd: cwd, maxBuffer: 10 * 1024 * 1024});
+			lastGrepOutput = grepOutput.toString();
+			return lastGrepOutput
 				.split('\n')
 				.filter(v => v.match(GREP_RESULT_PATTERN))
 				.map(v => new GrepResult(v, cwd));
@@ -205,12 +209,20 @@ function doGrepQuery(): void {
 	});
 }
 
+function copyResults(): void {
+	if (lastGrepOutput) {
+		copy.copy(lastGrepOutput);
+		vscode.window.showInformationMessage('Results copied to clipboard.');
+	}
+}
+
 export function activate(context: vscode.ExtensionContext) {
 	grepResults = new GrepResultsTree();
 
 	let commands = [
 		vscode.commands.registerCommand('grep-panel.grep', doGrepQuery),
-		vscode.commands.registerCommand('grep-panel.clear', clearResults)
+		vscode.commands.registerCommand('grep-panel.clear', clearResults),
+		vscode.commands.registerCommand('grep-panel.copy-results', copyResults),
 	];
 
 	commands.forEach((cmd) => context.subscriptions.push(cmd));
