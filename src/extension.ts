@@ -63,6 +63,10 @@ class GrepResultsTree implements vscode.TreeDataProvider<GrepResult> {
 	getChildren(element?: GrepResult | undefined): vscode.ProviderResult<GrepResult[]> {
 		return this.items;
 	}
+	
+	getParent(element: GrepResult): vscode.ProviderResult<GrepResult> {
+		return null;
+	}
 
 	setResults(results: GrepResult[]): void {
 		this.items = results;
@@ -77,6 +81,14 @@ class GrepResultsTree implements vscode.TreeDataProvider<GrepResult> {
 	dispose(): void {
 		this.treeView?.dispose();
 		this.treeView = undefined;
+	}
+
+	show(): void {
+		if (this.items.length > 0) {
+			// Set select to false, else we'll jump right to the first result
+			// and that can be quite disorientating.
+			this.treeView?.reveal(this.items[0], {select: false, focus: true});
+		}
 	}
 }
 
@@ -102,6 +114,7 @@ function grepExec(query: string): GrepResult[] {
 	}
 
 	let cmdIndex = 0;
+	let anyRan = false;
 	for (let cmdIndex = 0; cmdIndex < GREP_COMMANDS.length; ++cmdIndex) {
 		try {
 			const grepCmd = GREP_COMMANDS[cmdIndex];
@@ -112,16 +125,26 @@ function grepExec(query: string): GrepResult[] {
 				.filter(v => v.match(GREP_RESULT_PATTERN))
 				.map(v => new GrepResult(v, cwd));
 		}
-		catch (_) {}
+		catch (e: any) {
+			// An exit status of 1 means the command ran, but produced no
+			// results.  Differentiate between that happening and the case where
+			// no greps were executed successfully.
+			if (e.status === 1) {
+				anyRan = true;
+			}
+		}
 	}
 
-	vscode.window.showErrorMessage("Failed to run any grep command.");
+	if (!anyRan) {
+		vscode.window.showErrorMessage("Failed to run any grep command.");
+	}
 
 	return [];
 }
 
 function doGrep(query: string): void {
 	grepResults?.setResults(grepExec(query));
+	grepResults?.show();
 }
 
 function getSelectedText(): string | undefined {
