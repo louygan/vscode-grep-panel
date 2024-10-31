@@ -122,7 +122,7 @@ function grepExec(query: string): GrepResult[] {
 	for (let cmdIndex = 0; cmdIndex < GREP_COMMANDS.length; ++cmdIndex) {
 		try {
 			const grepCmd = GREP_COMMANDS[cmdIndex];
-			const grepOutput = execSync(`${grepCmd} ${query} .`, {cwd: cwd, maxBuffer: 10 * 1024 * 1024});
+			const grepOutput = execSync(`${grepCmd} ${query} *`, {cwd: cwd, maxBuffer: 10 * 1024 * 1024});
 			lastGrepOutput = grepOutput.toString();
 			return lastGrepOutput
 				.split('\n')
